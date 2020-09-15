@@ -1,12 +1,18 @@
 import React from 'react';
+import Backdrop from '../Backdrop/Backdrop';
 import classes from './Modal.module.css';
 
 const modal = (props) => {
-    return (
-        <div className={classes.Modal} >
-            {props.children}
-        </div>
-    );
-}
+  let modalClass = [classes.Modal];
+  if (props.show) modalClass.push(classes.Show);
+  return (
+    <>
+      <div className={modalClass.join(' ')}>{props.children}</div>
+      <Backdrop show={props.show} clicked={props.modalClosed} />
+    </>
+  );
+};
 
-export default modal;
+const checkShow = (prevProps, nextProps) => prevProps.show === nextProps.show;
+
+export default React.memo(modal, checkShow);

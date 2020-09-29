@@ -13,6 +13,6 @@ const modal = (props) => {
   );
 };
 
-const checkShow = (prevProps, nextProps) => prevProps.show === nextProps.show;
+const checkShow = (prevProps, nextProps) => prevProps.show === nextProps.show && prevProps.children === nextProps.children;
 
 export default React.memo(modal, checkShow);

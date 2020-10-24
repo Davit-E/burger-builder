@@ -1,33 +1,49 @@
-.Burger {
-  width: 100%;
-  margin: auto;
-  height: 500px;
-  overflow: scroll;
-  text-align: center;
-  font-weight: bold;
-  font-size: 1.2rem;
+.BurgerWrapper {
+  width: 100vh;
+  height: 100vh;
+  /* max-width: 50px; */
+  /* max-height: 50px; */
+  /* display: flex; */
+  /* overflow: scroll; */
+  margin: 0 auto;
 }
 
+.Burger {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  /* font-weight: bold; */
+  font-size: 1.2rem;
+  /* margin-bottom: auto; */
+  position: relative;
+  /* top: -40%; */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.BurgerWrapper::-webkit-scrollbar,
 .Burger::-webkit-scrollbar {
   display: none;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
-.Burger {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+.BurgerWrapper .Burger {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
-@media (min-width: 500px) and (min-height: 401px) {
-    .Burger {
-      width: 450px;
-      height: 400px;
-    }
-  }
-
-@media (min-width: 1000px) and (min-height: 700px) {
-  .Burger {
-    width: 700px;
-    height: 600px;
-  }
+.Burger p {
+  color: #323e44;
 }
+
+/* @media (max-width: 730px) {
+  .BurgerWrapperInBuilder {
+    height: 50%;
+  }
+  .BurgerInBuilder {
+    height: 100%;
+  }
+} */

@@ -9,13 +9,13 @@ const sideDrawer = (props) => {
   let sideDrawerClasses = [classes.SideDrawer, openOrClosed];
   return (
     <>
-      <Backdrop show={props.open} clicked={props.clicked}/>
+      <Backdrop show={props.open} clicked={props.clicked} />
       <div className={sideDrawerClasses.join(' ')}>
         <div className={classes.Logo}>
           <Logo />
         </div>
         <nav>
-          <NavigationItems />
+          <NavigationItems isSideNav={props.open} navClicked={props.navClicked} />
         </nav>
       </div>
     </>

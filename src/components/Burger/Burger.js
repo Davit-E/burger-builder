@@ -13,17 +13,24 @@ const burger = (props) => {
   }
 
   if (allIngredients.length === 0) {
-    allIngredients.push(
-      <p key='startAdding'>Please start adding ingredients!</p>
-    );
+    allIngredients.push(<p key="startAdding">Start adding!</p>);
   }
 
+  let burgerWrapperClass = [classes.BurgerWrapper];
+  let burgerClass = [classes.Burger];
+
+  if(props.isInBuilder) {
+    burgerWrapperClass.push(classes.BurgerWrapperInBuilder);
+    burgerClass.push(classes.BurgerInBuilder);
+  }
   return (
-    <div className={classes.Burger}>
-      <BurgerIngredient type='bread-top' />
-      {allIngredients}
-      <BurgerIngredient type='bread-bottom' />
-    </div>
+      <div className={burgerClass.join(' ')}>
+        <BurgerIngredient type="bread-top" />
+        {allIngredients}
+        <BurgerIngredient type="bread-bottom" />
+      </div>
+    // <div className={burgerWrapperClass.join(' ')}>
+    // </div>
   );
 };
 

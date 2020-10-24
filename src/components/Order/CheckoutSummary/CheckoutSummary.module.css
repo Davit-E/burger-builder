@@ -1,0 +1,21 @@
+.CheckoutSummary {
+  width: 100%;
+  height: auto;
+  color: #323E44;
+}
+
+.CheckoutBurger {
+  width: 90vw;
+  height: 90vw;
+  margin: auto;
+}
+
+
+@media (min-width: 730px) {
+  .CheckoutBurger {
+    width: 70vh;
+    height: 70vh;
+  }
+}
+
+

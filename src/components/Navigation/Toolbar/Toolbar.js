@@ -7,10 +7,10 @@ import classes from './Toolbar.module.css';
 const toolbar = (props) => {
   return (
     <header className={classes.Toolbar}>
-      <DrawerToggle openDrawer={props.openDrawer}/>
       <div className={classes.Logo}>
         <Logo />
       </div>
+      <DrawerToggle openDrawer={props.openDrawer}/>
       <nav className={classes.DesktopOnly}>
         <NavigationItems />
       </nav>

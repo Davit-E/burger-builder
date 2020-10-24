@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '../../UI/Button/Button';
+import classes from './OrderSummary.module.css';
 
 const orderSummary = (props) => {
   const ingredientSummary = Object.entries(props.ingredients).map(
@@ -15,10 +16,10 @@ const orderSummary = (props) => {
     }
   );
   return (
-    <>
+    <div className={classes.OrderSummary}>
       <h3>Your Order</h3>
       <p>A delicious burger with the following ingredients: </p>
-      <ul>{ingredientSummary}</ul>
+      <ul style={{padding: 'none'}} className={classes.Ingredients}>{ingredientSummary}</ul>
       <p>Total Price: {props.price.toFixed(2)}$</p>
       <p>Continue to Checkout?</p>
       <Button btnType="Danger" clicked={props.purchaseCanceled}>
@@ -27,7 +28,7 @@ const orderSummary = (props) => {
       <Button btnType="Success" clicked={props.purchaseContinued}>
         CONTINUE
       </Button>
-    </>
+    </div>
   );
 };
 

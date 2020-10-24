@@ -1,0 +1,12 @@
+.Order {
+  width: 100%;
+  height: auto;
+  border-bottom: 1px solid rgba(156, 156, 156, 0.438);
+  text-align: left;
+  padding-left: 1rem;
+  box-sizing: border-box;
+}
+
+.Order:last-of-type{
+  border-bottom: none;
+}

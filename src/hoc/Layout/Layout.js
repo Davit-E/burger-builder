@@ -3,13 +3,10 @@ import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import classes from './Layout.module.css';
 
+
 class Layout extends Component {
   state = {
     showSideDrawer: false,
-  };
-
-  sideDrawerClosedHandler = () => {
-    this.setState({ showSideDrawer: false });
   };
 
   sideDrawerToggleHandler = () => {
@@ -24,7 +21,8 @@ class Layout extends Component {
         <Toolbar openDrawer={this.sideDrawerToggleHandler} />
         <SideDrawer
           open={this.state.showSideDrawer}
-          clicked={this.sideDrawerClosedHandler}
+          clicked={this.sideDrawerToggleHandler}
+          navClicked={this.sideDrawerToggleHandler}
         />
         <main className={classes.Content}>{this.props.children}</main>
       </>

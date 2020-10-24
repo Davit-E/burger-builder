@@ -1,0 +1,18 @@
+.Input {
+  margin-bottom: 1rem;
+  padding: 1rem 0.5rem;
+  width: 80%;
+}
+
+.Invalid {
+  border: 1px solid rgb(190, 33, 33);
+}
+
+.ValidationError {
+  font-size: 0.8rem;
+  color: rgb(190, 33, 33);
+  width: 80%;
+  text-align: start;
+  margin: 0;
+  margin-bottom: 2px;
+}

@@ -4,6 +4,8 @@ import Order from '../../components/Order/Order';
 import axios from '../../axios-orders';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 class Orders extends Component {
   state = {
@@ -12,23 +14,35 @@ class Orders extends Component {
   };
 
   componentDidMount() {
-    axios
-      .get('/orders.json')
-      .then((orders) => {
-        let ordersArr = [];
+    if (this.props.token) {
+      axios
+        .get('/orders.json', {
+          params: {
+              auth: this.props.token,
+              orderBy: '"userId"',
+              equalTo: `"${this.props.userId}"`,
+          }
+        })
+        .then((orders) => {
+          let ordersArr = [];
 
-        for (let [key, value] of Object.entries(orders.data)) {
-          ordersArr.push({ id: key, ...value });
-        }
-        this.setState({ orders: ordersArr, loading: false });
-      })
-      .catch((err) => {
-        this.setState({ loading: false });
-        console.log(err);
-      });
+          for (let [key, value] of Object.entries(orders.data)) {
+            ordersArr.push({ id: key, ...value });
+          }
+          this.setState({ orders: ordersArr, loading: false });
+        })
+        .catch((err) => {
+          this.setState({ loading: false });
+          console.log(err);
+        });
+    }
   }
 
   render() {
+    let redirect = null;
+    if (!this.props.token) {
+      redirect = <Redirect to='burger-builder' />;
+    }
     let orders = <Spinner />;
 
     if (!this.state.loading) {
@@ -42,8 +56,20 @@ class Orders extends Component {
         );
       });
     }
-    return <div className={classes.Orders}>{orders}</div>;
+    return (
+      <div className={classes.Orders}>
+        {orders}
+        {redirect}
+      </div>
+    );
   }
 }
 
-export default withErrorHandler(Orders, axios);
+const mapStateToProps = (state) => {
+  return {
+    token: state.auth.token,
+    userId: state.auth.userId,
+  };
+};
+
+export default connect(mapStateToProps)(withErrorHandler(Orders, axios));

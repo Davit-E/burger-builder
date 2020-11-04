@@ -29,8 +29,6 @@ const burger = (props) => {
         {allIngredients}
         <BurgerIngredient type="bread-bottom" />
       </div>
-    // <div className={burgerWrapperClass.join(' ')}>
-    // </div>
   );
 };
 

@@ -1,0 +1,38 @@
+.Auth {
+  margin: 10rem auto;
+  width: 80%;
+  padding: 2rem;
+  height: auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(133, 133, 133, 0.63);
+  border-radius: 5px;
+  box-shadow: 2px 3px 10px rgba(133, 133, 133, 0.363);
+  align-items: center;
+}
+.Auth form {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: auto;
+  width: 90%;
+}
+.Auth > Button {
+   align-self: flex-start;
+}
+.ErrorMessage {
+  color: rgb(189, 15, 15);
+}
+
+.SignText {
+  color: rgb(201, 191, 50);
+}
+
+@media (min-width: 600px) {
+  .Auth {
+    width: 500px;
+  }
+}

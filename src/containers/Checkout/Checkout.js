@@ -1,22 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
 import classes from './Checkout.module.css';
-import ContactData from './ContactData/ContactData';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+const ContactData = lazy(() => import('./ContactData/ContactData'));
 
 class Checkout extends Component {
-  // state = {
-  //   ingredients: {
-  //     salad: 0,
-  //     tomato: 0,
-  //     onion: 0,
-  //     cheese: 0,
-  //     meat: 0,
-  //   },
-  //   price: 0,
-  // };
-
   // componentDidMount() {
   //   // console.log(this.props.location.state);
 
@@ -43,31 +32,34 @@ class Checkout extends Component {
   };
 
   render() {
-    return (
-      <div className={classes.Checkout}>
-        <CheckoutSummary
-          ingredients={this.props.ingredients}
-          canceled={this.cancelHandler}
-          continued={this.continueHandler}
-        />
-        <Route
-          path={this.props.match.url + '/contact-data'}
-          component={ContactData}
-          // render={(props) => (
-          //   <ContactData
-          //     {...props}
-          //     ingredients={this.props.ingredients}
-          //   />
-          // )}
-        />
-      </div>
-    );
+    let checkoutSummary = <Redirect to='/burger-builder' />;
+
+    if (this.props.ordering) {
+      checkoutSummary = (
+        <div className={classes.Checkout}>
+          <CheckoutSummary
+            ingredients={this.props.ingredients}
+            canceled={this.cancelHandler}
+            continued={this.continueHandler}
+          />
+          <Suspense>
+            <Route
+              path={this.props.match.url + '/contact-data'}
+              component={ContactData}
+            />
+          </Suspense>
+        </div>
+      );
+    }
+
+    return checkoutSummary;
   }
 }
 
 const matchStateToProps = (state) => {
   return {
-    ingredients: state.ingredients,
+    ingredients: state.burger.ingredients,
+    ordering: state.burger.ordering,
   };
 };
 

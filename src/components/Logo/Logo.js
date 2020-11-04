@@ -12,10 +12,10 @@ const logo = () => {
   };
 
   return (
-    <div className={classes.Logo}>
+    <a className={classes.Logo} href='/burger-builder' >
       {/* <img src={burgerLogo} alt='My Buger' /> */}
       <Burger ingredients={ingredients} />
-    </div>
+    </a>
   );
 };
 

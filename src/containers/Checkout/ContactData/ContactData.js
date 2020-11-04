@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import Button from '../../../components/UI/Button/Button';
 import classes from './ContactData.module.css';
 import axios from '../../../axios-orders';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import { connect } from 'react-redux';
+import * as actionCreators from '../../../store/actions/index';
+import { Redirect } from 'react-router-dom';
 
 class ContactData extends Component {
   state = {
@@ -83,7 +86,6 @@ class ContactData extends Component {
         },
       },
     },
-    loading: false,
   };
 
   componentDidMount() {
@@ -128,25 +130,16 @@ class ContactData extends Component {
       for (const key in this.state.orderForm) {
         orderForm[key] = this.state.orderForm[key].value;
       }
-      this.setState({ loading: true });
 
       const order = {
         ingredients: this.props.ingredients,
         price: this.props.price.toFixed(2),
+        userId: this.props.userId,
         orderData: orderForm,
       };
 
-      axios
-        .post('/orders.json', order)
-        .then((res) => {
-          console.log(res);
-          this.setState({ loading: false });
-          this.props.history.push('/');
-        })
-        .catch((err) => {
-          console.log(err);
-          this.setState({ loading: false });
-        });
+      this.props.onSendOrder();
+      this.props.onSendOrderSuccessful(order, this.props.token);
     } else {
       this.setState({ orderForm: formCopy });
     }
@@ -188,16 +181,21 @@ class ContactData extends Component {
     let form = (
       <form onSubmit={this.orderHandler}>
         {orderFormArr}
-        <Button btnType="Success">Order</Button>
+        <Button btnType='Success'>Order</Button>
       </form>
     );
 
-    if (this.state.loading) {
+    if (this.props.loading) {
       form = <Spinner />;
+    }
+    let redirect = null;
+
+    if (this.props.orderSent) {
+      redirect = <Redirect to='/' />;
     }
 
     return (
-      <div id="ContactData" className={classes.ContactData}>
+      <div id='ContactData' className={classes.ContactData}>
         <h4>Enter your contact info:</h4>
         {form}
         <div
@@ -205,6 +203,7 @@ class ContactData extends Component {
             this.el = el;
           }}
         />
+        {redirect}
       </div>
     );
   }
@@ -212,9 +211,25 @@ class ContactData extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    ingredients: state.ingredients,
-    price: state.totalPrice,
+    ingredients: state.burger.ingredients,
+    price: state.burger.totalPrice,
+    loading: state.order.loading,
+    orderSent: state.order.orderSent,
+    token: state.auth.token,
+    userId: state.auth.userId,
+    ordering: state.burger.ordering,
   };
 };
 
-export default connect(mapStateToProps)(ContactData);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onSendOrder: () => dispatch(actionCreators.sendOrderStart()),
+    onSendOrderSuccessful: (order, token) =>
+      dispatch(actionCreators.sendOrderSuccessful(order, token)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(ContactData, axios));

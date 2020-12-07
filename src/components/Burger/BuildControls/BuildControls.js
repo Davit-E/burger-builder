@@ -24,9 +24,19 @@ const buildControls = (props) => {
 
   return (
     <div className={classes.BuildControls}>
-      <p>Current Price: <strong>{props.price.toFixed(2)}$</strong></p>
-      {controlsArr}
-      <button onClick={props.ordered} className={classes.OrderButton} disabled={!props.purchasable} >Order</button>
+      <div className={classes.Content}>
+        {controlsArr}
+        <p>
+          Current Price: {props.price.toFixed(2)}$
+        </p>
+        <button
+          onClick={props.ordered}
+          className={classes.OrderButton}
+          disabled={!props.purchasable}
+        >
+          Order
+        </button>
+      </div>
     </div>
   );
 };

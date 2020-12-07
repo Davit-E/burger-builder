@@ -1,7 +1,6 @@
 .Auth {
   margin: 10rem auto;
   width: 80%;
-  padding: 2rem;
   height: auto;
   text-align: center;
   display: flex;
@@ -34,5 +33,6 @@
 @media (min-width: 600px) {
   .Auth {
     width: 500px;
+    padding: 2rem;
   }
 }

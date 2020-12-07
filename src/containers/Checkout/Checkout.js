@@ -1,66 +1,59 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Suspense, lazy } from 'react';
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
 import classes from './Checkout.module.css';
 import { Route, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 const ContactData = lazy(() => import('./ContactData/ContactData'));
 
-class Checkout extends Component {
-  // componentDidMount() {
-  //   // console.log(this.props.location.state);
+const Checkout = (props) => {
+  // useEffect(() => {
+  //   // console.log(props.location.state);
 
   //   let ingredients = {};
-  //   let params = new URLSearchParams(this.props.location.search);
+  //   let params = new URLSearchParams(props.location.search);
   //   let totalPrice = +params.get('totalPrice');
   //   totalPrice = totalPrice.toFixed(2);
-  //   for (let i in this.state.ingredients) {
+  //   for (let i in state.ingredients) {
   //     ingredients[i] = params.get(i);
   //   }
-  //   this.setState({ ingredients: ingredients, price: totalPrice });
-  // }
+  //   setState({ ingredients: ingredients, price: totalPrice });
+  // }, [props]);
 
-  cancelHandler = () => {
-    this.props.history.push('/burger-builder');
+  const ingredients = useSelector((state) => state.burger.ingredients);
+  const ordering = useSelector((state) => state.burger.ordering);
+
+  const cancelHandler = () => {
+    props.history.push('/burger-builder');
   };
 
-  continueHandler = () => {
-    this.props.history.push({
-      pathname: this.props.match.url + '/contact-data',
-      search: this.props.location.search,
+  const continueHandler = () => {
+    props.history.push({
+      pathname: props.match.url + '/contact-data',
+      search: props.location.search,
       hash: '#ContactData',
     });
   };
 
-  render() {
-    let checkoutSummary = <Redirect to='/burger-builder' />;
+  let checkoutSummary = <Redirect to='/burger-builder' />;
 
-    if (this.props.ordering) {
-      checkoutSummary = (
-        <div className={classes.Checkout}>
-          <CheckoutSummary
-            ingredients={this.props.ingredients}
-            canceled={this.cancelHandler}
-            continued={this.continueHandler}
+  if (ordering) {
+    checkoutSummary = (
+      <div className={classes.Checkout}>
+        <CheckoutSummary
+          ingredients={ingredients}
+          canceled={cancelHandler}
+          continued={continueHandler}
+        />
+        <Suspense>
+          <Route
+            path={props.match.url + '/contact-data'}
+            component={ContactData}
           />
-          <Suspense>
-            <Route
-              path={this.props.match.url + '/contact-data'}
-              component={ContactData}
-            />
-          </Suspense>
-        </div>
-      );
-    }
-
-    return checkoutSummary;
+        </Suspense>
+      </div>
+    );
   }
-}
-
-const matchStateToProps = (state) => {
-  return {
-    ingredients: state.burger.ingredients,
-    ordering: state.burger.ordering,
-  };
+  return checkoutSummary;
 };
 
-export default connect(matchStateToProps)(Checkout);
+export default Checkout;

@@ -3,6 +3,7 @@ import actionTypes from '../actions/actionTypes';
 const initialState = {
   token: null,
   userId: null,
+  userEmail: null,
   error: null,
   loading: false,
 };
@@ -20,6 +21,7 @@ const authStart = () => {
   return {
     token: null,
     userId: null,
+    userEmail: null,
     error: null,
     loading: true,
   };
@@ -28,6 +30,7 @@ const authSuccess = (action) => {
   return {
     token: action.token,
     userId: action.userId,
+    userEmail: action.userEmail,
     error: null,
     loading: false,
   };
@@ -46,9 +49,10 @@ const authLogout = () => {
   return {
     token: null,
     userId: null,
+    userEmail: null,
     error: null,
     loading: false,
-  }
+  };
 };
 
 const reducer = (state = initialState, action) => {

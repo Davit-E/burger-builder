@@ -1,27 +1,28 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import classes from './Orders.module.css';
 import Order from '../../components/Order/Order';
 import axios from '../../axios-orders';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-class Orders extends Component {
-  state = {
-    orders: [],
-    loading: true,
-  };
+const Orders = () => {
+  const [ordersList, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  componentDidMount() {
-    if (this.props.token) {
+  const token = useSelector((state) => state.auth.token);
+  const userId = useSelector((state) => state.auth.userId);
+
+  useEffect(() => {
+    if (token) {
       axios
         .get('/orders.json', {
           params: {
-              auth: this.props.token,
-              orderBy: '"userId"',
-              equalTo: `"${this.props.userId}"`,
-          }
+            auth: token,
+            orderBy: '"userId"',
+            equalTo: `"${userId}"`,
+          },
         })
         .then((orders) => {
           let ordersArr = [];
@@ -29,24 +30,26 @@ class Orders extends Component {
           for (let [key, value] of Object.entries(orders.data)) {
             ordersArr.push({ id: key, ...value });
           }
-          this.setState({ orders: ordersArr, loading: false });
+          setOrders(ordersArr);
+          setLoading(false);
         })
         .catch((err) => {
-          this.setState({ loading: false });
+          setLoading(false);
           console.log(err);
         });
     }
+  }, [token, userId]);
+
+  let redirect = null;
+  if (!token) {
+    redirect = <Redirect to='burger-builder' />;
   }
+  let orders = <Spinner />;
 
-  render() {
-    let redirect = null;
-    if (!this.props.token) {
-      redirect = <Redirect to='burger-builder' />;
-    }
-    let orders = <Spinner />;
-
-    if (!this.state.loading) {
-      orders = this.state.orders.map((order) => {
+  if (!loading) {
+    if (!ordersList.length) orders = <p>You haven't ordered yet</p>;
+    else {
+      orders = ordersList.map((order) => {
         return (
           <Order
             ingredients={order.ingredients}
@@ -56,20 +59,13 @@ class Orders extends Component {
         );
       });
     }
-    return (
-      <div className={classes.Orders}>
-        {orders}
-        {redirect}
-      </div>
-    );
   }
-}
-
-const mapStateToProps = (state) => {
-  return {
-    token: state.auth.token,
-    userId: state.auth.userId,
-  };
+  return (
+    <div className={classes.Orders}>
+      {orders}
+      {redirect}
+    </div>
+  );
 };
 
-export default connect(mapStateToProps)(withErrorHandler(Orders, axios));
+export default withErrorHandler(Orders, axios);

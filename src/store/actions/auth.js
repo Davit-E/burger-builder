@@ -6,11 +6,12 @@ export const authStart = () => {
     type: actionTypes.AUTH_START,
   };
 };
-export const authSuccess = (token, userId) => {
+export const authSuccess = (token, userId, userEmail) => {
   return {
     type: actionTypes.AUTH_SUCCESS,
     token: token,
     userId: userId,
+    userEmail: userEmail,
   };
 };
 export const authFail = (error) => {
@@ -55,8 +56,9 @@ export const auth = (email, password, isSignIn) => (dispatch) => {
       let expirationDate = Date.now() + res.data.expiresIn * 1000;
       localStorage.setItem('token', res.data.idToken);
       localStorage.setItem('userId', res.data.localId);
+      localStorage.setItem('userEmail', email);
       localStorage.setItem('expirationDate', expirationDate);
-      dispatch(authSuccess(res.data.idToken, res.data.localId));
+      dispatch(authSuccess(res.data.idToken, res.data.localId, email));
       dispatch(authLogoutTimeout(res.data.expiresIn));
     })
     .catch((err) => {
@@ -68,12 +70,14 @@ export const auth = (email, password, isSignIn) => (dispatch) => {
 export const authCheckstate = () => (dispatch) => {
   let token = localStorage.getItem('token');
   let userId = localStorage.getItem('userId');
+  let userEmail = localStorage.getItem('userEmail');
+
   if (token) {
     let expirationDate = localStorage.getItem('expirationDate');
     if (expirationDate <= Date.now()) {
       dispatch(authLogout());
     } else {
-      dispatch(authSuccess(token, userId));
+      dispatch(authSuccess(token, userId, userEmail));
       dispatch(
         authLogoutTimeout(
           (expirationDate - Date.now()) / 1000

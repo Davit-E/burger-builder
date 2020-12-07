@@ -1,14 +1,24 @@
 .OrderSummary {
   width: 100%;
   color: #323E44;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.OrderHeader {
 }
 
 .Ingredients {
   list-style-type: none;
   padding-left: 0;
   margin: 0;
+  /* width: auto; */
+  /* align-self: baseline; */
 }
 
 .Ingredients li {
+  font-size: 1.2rem;
   margin-bottom: 0.5rem;
 }

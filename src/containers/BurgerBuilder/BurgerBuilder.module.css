@@ -1,25 +1,21 @@
 .BurgerBuilder {
   display: flex;
-  padding-top: 4.5rem;
+  padding-top: 1rem;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: 100vh;
+  height: 100%;
 }
 
 .BurgerWrapper {
-  /* width: 100vh; */
-  /* height: 100vh; */
   width: 40vh;
   height: 40vh;
-  /* display: flex; */
-  /* overflow: scroll; */
-  margin: 0 auto;
 }
 
 @media (min-width: 730px) {
   .BurgerBuilder {
-    flex-direction: row-reverse;
+    padding-top: 10rem;
+    flex-direction: row;
     align-items: flex-start;
     justify-content: flex-end;
   }
@@ -27,6 +23,5 @@
     width: 500px;
     height: 500px;
     padding: 1rem;
-
   }
 }

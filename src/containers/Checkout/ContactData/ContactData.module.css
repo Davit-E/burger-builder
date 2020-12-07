@@ -1,6 +1,7 @@
 .ContactData {
   margin: 5rem auto;
   width: 80%;
+  min-height: 30rem;
   height: auto;
   text-align: center;
   display: flex;
@@ -8,6 +9,8 @@
   border: 1px solid rgba(133, 133, 133, 0.63);
   border-radius: 5px;
   box-shadow: 2px 3px 10px rgba(133, 133, 133, 0.363);
+  align-items: center;
+  justify-content: center;
 }
 .ContactData form {
   margin-top: 0.5rem;
@@ -16,6 +19,19 @@
   justify-content: space-between;
   align-items: center;
   height: auto;
+  width: 90%;
+}
+
+.SuccessText {
+  font-weight: normal;
+}
+.OrderAgain {
+  text-decoration: none;
+  color: white;
+  background-color: #d3ca49;
+  padding: 0.5rem;
+  border-radius: 5px;
+  margin-top: 5rem;
 }
 
 @media (min-width: 600px) {

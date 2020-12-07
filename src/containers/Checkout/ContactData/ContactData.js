@@ -1,102 +1,114 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Button from '../../../components/UI/Button/Button';
 import classes from './ContactData.module.css';
 import axios from '../../../axios-orders';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import Spinner from '../../../components/UI/Spinner/Spinner';
+import SuccessSvg from '../../../components/UI/Svg/SuccessSvg';
 import Input from '../../../components/UI/Input/Input';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as actionCreators from '../../../store/actions/index';
-import { Redirect } from 'react-router-dom';
 
-class ContactData extends Component {
-  state = {
-    orderForm: {
-      name: {
-        elemType: 'input',
-        elemConfig: {
-          type: 'text',
-          placeholder: 'Name',
-        },
-        value: '',
-        validation: {
-          required: true,
-        },
-        isValid: false,
-        touched: false,
+const ContactData = () => {
+  const dispatch = useDispatch();
+  const onSendOrder = () => dispatch(actionCreators.sendOrderStart());
+  const onSendOrderSuccessful = (order, token) =>
+    dispatch(actionCreators.sendOrderSuccessful(order, token));
+
+  const ingredients = useSelector((state) => state.burger.ingredients);
+  const price = useSelector((state) => state.burger.totalPrice);
+  const loading = useSelector((state) => state.order.loading);
+  const orderSent = useSelector((state) => state.order.orderSent);
+  const token = useSelector((state) => state.auth.token);
+  const userId = useSelector((state) => state.auth.userId);
+
+  const [orderForm, setOrderForm] = useState({
+    name: {
+      elemType: 'input',
+      elemConfig: {
+        type: 'text',
+        placeholder: 'Name',
       },
-      email: {
-        elemType: 'input',
-        elemConfig: {
-          type: 'email',
-          placeholder: 'Email',
-        },
-        value: '',
-        validation: {
-          required: true,
-        },
-        isValid: false,
-        touched: false,
+      value: '',
+      validation: {
+        required: true,
       },
-      street: {
-        elemType: 'input',
-        elemConfig: {
-          type: 'text',
-          placeholder: 'Street',
-        },
-        value: '',
-        validation: {
-          required: true,
-        },
-        isValid: false,
-        touched: false,
+      isValid: false,
+      touched: false,
+    },
+    email: {
+      elemType: 'input',
+      elemConfig: {
+        type: 'email',
+        placeholder: 'Email',
       },
-      zipCode: {
-        elemType: 'input',
-        elemConfig: {
-          type: 'text',
-          placeholder: 'ZIP Code',
-        },
-        value: '',
-        validation: {
-          required: true,
-          minLength: 5,
-          maxLength: 5,
-        },
-        isValid: false,
-        touched: false,
+      value: '',
+      validation: {
+        required: true,
       },
-      deliveryMetod: {
-        elemType: 'select',
-        elemConfig: {
-          options: [
-            {
-              value: 'fastest',
-              displayOptions: 'Fastest',
-            },
-            {
-              value: 'cheapest',
-              displayOptions: 'Cheapest',
-            },
-          ],
-        },
-        value: 'fastest',
-        validation: {
-          required: false,
-        },
+      isValid: false,
+      touched: false,
+    },
+    street: {
+      elemType: 'input',
+      elemConfig: {
+        type: 'text',
+        placeholder: 'Street',
+      },
+      value: '',
+      validation: {
+        required: true,
+      },
+      isValid: false,
+      touched: false,
+    },
+    zipCode: {
+      elemType: 'input',
+      elemConfig: {
+        type: 'text',
+        placeholder: 'ZIP Code',
+      },
+      value: '',
+      validation: {
+        required: true,
+        minLength: 5,
+        maxLength: 5,
+      },
+      isValid: false,
+      touched: false,
+    },
+    deliveryMetod: {
+      elemType: 'select',
+      elemConfig: {
+        options: [
+          {
+            value: 'fastest',
+            displayOptions: 'Fastest',
+          },
+          {
+            value: 'cheapest',
+            displayOptions: 'Cheapest',
+          },
+        ],
+      },
+      value: 'fastest',
+      validation: {
+        required: false,
       },
     },
+  });
+
+  useEffect(() => {
+    scrollToBottom();
+  }, []);
+
+  const scrollEl = useRef();
+
+  const scrollToBottom = () => {
+    scrollEl.current.scrollIntoView({ behavior: 'smooth' });
   };
 
-  componentDidMount() {
-    this.scrollToBottom();
-  }
-
-  scrollToBottom = () => {
-    this.el.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  checkValidity = (value, rules) => {
+  const checkValidity = (value, rules) => {
     let isValid = true;
     if (rules.required) {
       isValid = value.trim() !== '' && isValid;
@@ -113,123 +125,95 @@ class ContactData extends Component {
     return isValid;
   };
 
-  orderHandler = (event) => {
+  const orderHandler = (event) => {
     event.preventDefault();
     let formFilled = true;
-    let formCopy = { ...this.state.orderForm };
+    let formCopy = { ...orderForm };
 
-    for (const [key, value] of Object.entries(this.state.orderForm)) {
-      formCopy[key] = { ...this.state.orderForm[key], touched: true };
+    for (const [key, value] of Object.entries(orderForm)) {
+      formCopy[key] = { ...orderForm[key], touched: true };
       if (value.validation.required && !value.isValid) {
         formFilled = false;
       }
     }
 
     if (formFilled) {
-      let orderForm = {};
-      for (const key in this.state.orderForm) {
-        orderForm[key] = this.state.orderForm[key].value;
+      let orderFormObj = {};
+      for (const key in orderForm) {
+        orderFormObj[key] = orderForm[key].value;
       }
 
       const order = {
-        ingredients: this.props.ingredients,
-        price: this.props.price.toFixed(2),
-        userId: this.props.userId,
-        orderData: orderForm,
+        ingredients: ingredients,
+        price: price.toFixed(2),
+        userId: userId,
+        orderData: orderFormObj,
       };
 
-      this.props.onSendOrder();
-      this.props.onSendOrderSuccessful(order, this.props.token);
+      onSendOrder();
+      onSendOrderSuccessful(order, token);
     } else {
-      this.setState({ orderForm: formCopy });
+      setOrderForm(formCopy);
     }
   };
 
-  inputChangedHandler = (event, inputKey) => {
+  const inputChangedHandler = (event, inputKey) => {
     let value = event.target.value;
-    this.setState((prevState) => {
-      let isValid = this.checkValidity(
-        value,
-        prevState.orderForm[inputKey].validation
-      );
+    setOrderForm((prevState) => {
+      let isValid = checkValidity(value, prevState[inputKey].validation);
       return {
-        orderForm: {
-          ...prevState.orderForm,
-          [inputKey]: {
-            ...prevState.orderForm[inputKey],
-            value,
-            isValid,
-            touched: true,
-          },
+        ...prevState,
+        [inputKey]: {
+          ...prevState[inputKey],
+          value,
+          isValid,
+          touched: true,
         },
       };
     });
   };
 
-  render() {
-    let orderFormArr = [];
-    for (let [key, value] of Object.entries(this.state.orderForm)) {
-      orderFormArr.push(
-        <Input
-          key={key}
-          {...value}
-          changed={(event) => this.inputChangedHandler(event, key)}
-        />
-      );
-    }
-
-    let form = (
-      <form onSubmit={this.orderHandler}>
-        {orderFormArr}
-        <Button btnType='Success'>Order</Button>
-      </form>
-    );
-
-    if (this.props.loading) {
-      form = <Spinner />;
-    }
-    let redirect = null;
-
-    if (this.props.orderSent) {
-      redirect = <Redirect to='/' />;
-    }
-
-    return (
-      <div id='ContactData' className={classes.ContactData}>
-        <h4>Enter your contact info:</h4>
-        {form}
-        <div
-          ref={(el) => {
-            this.el = el;
-          }}
-        />
-        {redirect}
-      </div>
+  let orderFormArr = [];
+  for (let [key, value] of Object.entries(orderForm)) {
+    orderFormArr.push(
+      <Input
+        key={key}
+        {...value}
+        changed={(event) => inputChangedHandler(event, key)}
+      />
     );
   }
-}
 
-const mapStateToProps = (state) => {
-  return {
-    ingredients: state.burger.ingredients,
-    price: state.burger.totalPrice,
-    loading: state.order.loading,
-    orderSent: state.order.orderSent,
-    token: state.auth.token,
-    userId: state.auth.userId,
-    ordering: state.burger.ordering,
-  };
+  let form = (
+    <form onSubmit={orderHandler}>
+      <h4>Enter your contact info:</h4>
+      {orderFormArr}
+      <Button btnType='Success'>Order</Button>
+    </form>
+  );
+
+  if (loading) {
+    form = <Spinner />;
+  }
+
+  if (orderSent) {
+    form = (
+      <>
+        <SuccessSvg />
+        <h3 className={classes.SuccessText}>Your Burger Is on the Way!</h3>
+        <a href='/' className={classes.OrderAgain}>
+          Order Again?
+        </a>
+      </>
+    );
+  }
+
+  return (
+    <div id='ContactData' className={classes.ContactData}>
+      {form}
+      <div ref={scrollEl} />
+    </div>
+  );
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onSendOrder: () => dispatch(actionCreators.sendOrderStart()),
-    onSendOrderSuccessful: (order, token) =>
-      dispatch(actionCreators.sendOrderSuccessful(order, token)),
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withErrorHandler(ContactData, axios));
+export default withErrorHandler(ContactData, axios);

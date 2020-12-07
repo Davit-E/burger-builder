@@ -1,16 +1,19 @@
 import React from 'react';
 import classes from './NavigationItems.module.css';
 import NavigationItem from './NavigationItem/NaviagtionItem';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as actionCreators from '../../../store/actions/index';
 
-const navigationItems = (props) => {
+const NavigationItems = (props) => {
+  const dispatch = useDispatch();
+  const onLogout = () => dispatch(actionCreators.authLogout());
+  const onNotOrdering = () => dispatch(actionCreators.notOrdering());
+  const isAuth = useSelector(state => state.auth.userId !== null);
 
   let logoutFunc = () => {
-    props.onLogout();
-    props.onNotOrdering();
-  }
-
+    onLogout();
+    onNotOrdering();
+  };
 
   let navigationItems = (
     <NavigationItem
@@ -22,7 +25,7 @@ const navigationItems = (props) => {
     </NavigationItem>
   );
 
-  if (props.isAuth) {
+  if (isAuth) {
     navigationItems = (
       <>
         <NavigationItem
@@ -36,7 +39,7 @@ const navigationItems = (props) => {
         <NavigationItem
           isSideNav={props.isSideNav}
           clicked={props.navClicked}
-          isAuth={props.isAuth}
+          isAuth={isAuth}
           logout={logoutFunc}
           link='/logout'
         >
@@ -60,17 +63,4 @@ const navigationItems = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    isAuth: state.auth.userId !== null,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onLogout: () => dispatch(actionCreators.authLogout()),
-    onNotOrdering: () => dispatch(actionCreators.notOrdering()),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(navigationItems);
+export default NavigationItems;

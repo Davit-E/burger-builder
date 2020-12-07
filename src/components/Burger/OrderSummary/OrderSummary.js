@@ -17,17 +17,20 @@ const orderSummary = (props) => {
   );
   return (
     <div className={classes.OrderSummary}>
-      <h3>Your Order</h3>
-      <p>A delicious burger with the following ingredients: </p>
-      <ul style={{padding: 'none'}} className={classes.Ingredients}>{ingredientSummary}</ul>
+      <h1 className={classes.OrderHeader}>Your Order</h1>
+      <ul style={{ padding: 'none' }} className={classes.Ingredients}>
+        {ingredientSummary}
+      </ul>
       <p>Total Price: {props.price.toFixed(2)}$</p>
       <p>Continue to Checkout?</p>
-      <Button btnType="Danger" clicked={props.purchaseCanceled}>
-        CANCEL
-      </Button>
-      <Button btnType="Success" clicked={props.purchaseContinued}>
-        CONTINUE
-      </Button>
+      <div>
+        <Button btnType='Danger' clicked={props.purchaseCanceled}>
+          CANCEL
+        </Button>
+        <Button btnType='Success' clicked={props.purchaseContinued}>
+          CONTINUE
+        </Button>
+      </div>
     </div>
   );
 };

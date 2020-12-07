@@ -38,7 +38,7 @@
 
 .OrderButton:disabled {
   background-color: #c7c6c6;
-  cursor: not-allowed;
+  cursor: default;
   color: #888888;
 }
 

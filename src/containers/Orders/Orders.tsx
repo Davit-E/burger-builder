@@ -41,14 +41,14 @@ const Orders = () => {
         })
         .catch((err) => {
           setLoading(false);
-          console.log(err);
+          // console.log(err);
         });
     }
   }, [token, userId]);
 
   let redirect = null;
   if (!token) {
-    redirect = <Redirect to='/burger-builder' />;
+    redirect = <Redirect to='/burger' />;
   }
   let orders: React.FC | JSX.Element[] | JSX.Element = <Spinner />;
 

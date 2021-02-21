@@ -141,7 +141,7 @@ const Auth = () => {
   if (isAuth && ordering) {
     redirect = <Redirect to='/checkout' />;
   } else if (isAuth) {
-    redirect = <Redirect to='/burger-builder' />;
+    redirect = <Redirect to='/burger' />;
   }
 
   return (

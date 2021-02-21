@@ -25,7 +25,7 @@ const navigationItem = (props: NavigationItemProps) => {
 
   return (
     <li className={classes.NavigationItem} onClick={clickFunc}>
-      <NavLink to={props.link} activeClassName={classes.active}>
+      <NavLink to={props.link} activeClassName={classes.active} replace>
         {props.children}
       </NavLink>
     </li>

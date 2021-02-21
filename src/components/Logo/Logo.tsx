@@ -2,6 +2,7 @@ import React from 'react';
 import classes from './Logo.module.css';
 import Burger from '../Burger/Burger';
 import { Ingredients } from '../../types/ingredients_interface';
+import { NavLink } from 'react-router-dom';
 
 const ingredients: Ingredients = {
   salad: 1,
@@ -13,10 +14,12 @@ const ingredients: Ingredients = {
 
 const logo = () => {
   return (
-    <a className={classes.Logo} href='/burger/burger-builder'>
-      {/* <img src={burgerLogo} alt='My Buger' /> */}
+    // <a className={classes.Logo} href='/'>
+    //   <Burger ingredients={ingredients} />
+    // </a>
+    <NavLink className={classes.Logo} to='/burger' replace>
       <Burger ingredients={ingredients} />
-    </a>
+    </NavLink>
   );
 };
 

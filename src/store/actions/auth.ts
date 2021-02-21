@@ -75,7 +75,6 @@ export const auth = (
       dispatch(authLogoutTimeout(res.data.expiresIn));
     })
     .catch((err) => {
-      console.log(err.response);
       dispatch(authFail(err.response.data.error.message));
     });
 };

@@ -6,11 +6,12 @@ import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import SuccessSvg from '../../../components/UI/Svg/SuccessSvg';
 import Input from '../../../components/UI/Input/Input';
-import {useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as actionCreators from '../../../store/actions/index';
 import { Form, OrderForm } from '../../../types/form_interface';
 import { OrderInterface as Order } from '../../../types/order_interface';
 import { RootState } from '../../../rootReducer';
+import { NavLink } from 'react-router-dom';
 
 const ContactData = () => {
   const dispatch = useDispatch();
@@ -18,7 +19,9 @@ const ContactData = () => {
   const onSendOrderSuccessful = (order: Order, token: string) =>
     dispatch(actionCreators.sendOrderSuccessful(order, token));
 
-  const ingredients = useSelector((state: RootState) => state.burger.ingredients);
+  const ingredients = useSelector(
+    (state: RootState) => state.burger.ingredients
+  );
   const price = useSelector((state: RootState) => state.burger.totalPrice);
   const loading = useSelector((state: RootState) => state.order.loading);
   const orderSent = useSelector((state: RootState) => state.order.orderSent);
@@ -217,9 +220,9 @@ const ContactData = () => {
       <>
         <SuccessSvg />
         <h3 className={classes.SuccessText}>Your Burger Is on the Way!</h3>
-        <a href='/burger/burger-builder' className={classes.OrderAgain}>
+        <NavLink to='/burger' className={classes.OrderAgain}>
           Order Again?
-        </a>
+        </NavLink>
       </>
     );
   }

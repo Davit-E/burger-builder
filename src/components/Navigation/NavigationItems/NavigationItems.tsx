@@ -60,7 +60,7 @@ const NavigationItems = (props: NavigationItemsProps) => {
       <NavigationItem
         isSideNav={props.isSideNav!}
         clicked={props.navClicked!}
-        link='/burger-builder'
+        link='/burger'
       >
         Burger Builder
       </NavigationItem>

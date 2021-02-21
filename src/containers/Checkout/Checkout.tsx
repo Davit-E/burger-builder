@@ -38,7 +38,7 @@ const Checkout = (props: CheckoutProps) => {
   );
 
   const cancelHandler = () => {
-    props.history.push({ pathname: '/burger-builder' });
+    props.history.push({ pathname: '/burger' });
   };
 
   const continueHandler = () => {
@@ -49,7 +49,7 @@ const Checkout = (props: CheckoutProps) => {
     });
   };
 
-  let checkoutSummary = <Redirect to='/burger-builder' />;
+  let checkoutSummary = <Redirect to='/burger' />;
 
   if (ordering) {
     checkoutSummary = (

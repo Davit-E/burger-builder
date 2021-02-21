@@ -23,11 +23,11 @@ const App = () => {
       <Layout>
         <Suspense fallback={<Spinner />}>
           <Switch>
-            <Route exact path='/burger-builder' component={BurgerBuilder} />
+            <Route exact path='/burger' component={BurgerBuilder} />
             <Route path='/checkout' component={Checkout} />
-            <Route exact path='/orders' component={Orders} />
-            <Route exact path='/auth' component={Auth} />
-            <Redirect to='/burger-builder' />
+            <Route path='/orders' component={Orders} />
+            <Route path='/auth' component={Auth} />
+            <Redirect to='/burger' />
           </Switch>
         </Suspense>
       </Layout>
